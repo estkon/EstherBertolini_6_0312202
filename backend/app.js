@@ -1,24 +1,29 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-const app = express();
+const sauceRoutes = require('./routes/sauce');
+const userRoutes = require('./routes/user');
 
-app.use((req, res, next) => {
-  console.log('Requête reçue !');
-  next();
-});
+mongoose.connect('mongodb+srv://Estkon:aFmiidFS6hz2Ac7b@cluster0.mnbeb.mongodb.net/Estkon?retryWrites=true&w=majority',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-app.use((req, res, next) => {
-  res.status(201);
-  next();
-});
+  const app = express();
 
-app.use((req, res, next) => {
-  res.json({ message: 'Votre requête a bien été reçue !' });
-  next();
-});
+//Eviter les erreurs CORS
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    next();
+  });
 
-app.use((req, res, next) => {
-  console.log('Réponse envoyée avec succès !');
-});
+app.use(bodyParser.json());
+
+app.use('api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
