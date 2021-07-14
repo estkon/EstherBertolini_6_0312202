@@ -1,18 +1,20 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const bodyParser = require('body-parser'); // analyse les données codées JSON, chaîne et URL soumises à l'aide de la requête HTTP POST
+const mongoose = require('mongoose'); // Permet de définir des objets avec un schéma
 const path = require('path');
 
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 mongoose.connect('mongodb+srv://Estkon:fRwHYhJHHnC6lrBK@cluster0.mnbeb.mongodb.net/Estkon?retryWrites=true&w=majority',
-  { useNewUrlParser: true,
-    useUnifiedTopology: true })
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-  const app = express();
+const app = express();
 
 //Eviter les erreurs CORS
 app.use((req, res, next) => {
